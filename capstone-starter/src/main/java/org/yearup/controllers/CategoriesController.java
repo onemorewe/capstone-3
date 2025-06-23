@@ -1,6 +1,7 @@
 package org.yearup.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,6 @@ public class CategoriesController {
         return categoryService.findAllCategories();
     }
 
-
     @GetMapping("/{id}")
     public Category getById(@PathVariable int id) {
         return categoryService.findById(id);
@@ -46,15 +46,17 @@ public class CategoriesController {
                 .body(newCategory);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateCategory(@PathVariable int id, @RequestBody Category category) {
         categoryService.updateCategory(id, category);
     }
 
-
-    // add annotation to call this method for a DELETE action - the url path must include the categoryId
-    // add annotation to ensure that only an ADMIN can call this function
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable int id) {
-        // delete the category by id
+        categoryService.deleteCategory(id);
     }
 }
