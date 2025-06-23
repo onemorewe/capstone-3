@@ -1,123 +1,46 @@
 package org.yearup.models;
 
-import java.math.BigDecimal;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
-public class Product
-{
-    private int productId;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.math.BigDecimal;
+import java.util.Objects;
+
+@Entity(name = "products")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+public class Product {
+    @Id
+    private Integer productId;
     private String name;
     private BigDecimal price;
     private int categoryId;
     private String description;
     private String color;
     private int stock;
+    @Column(name = "featured")
     private boolean isFeatured;
     private String imageUrl;
 
-    public Product()
-    {
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Product product = (Product) o;
+        return getProductId() != null && Objects.equals(getProductId(), product.getProductId());
     }
 
-    public Product(int productId, String name, BigDecimal price, int categoryId, String description, String color, int stock, boolean isFeatured, String imageUrl)
-    {
-        this.productId = productId;
-        this.name = name;
-        this.price = price;
-        this.categoryId = categoryId;
-        this.description = description;
-        this.color = color;
-        this.stock = stock;
-        this.isFeatured = isFeatured;
-        this.imageUrl = imageUrl;
-    }
-
-    public int getProductId()
-    {
-        return productId;
-    }
-
-    public void setProductId(int productId)
-    {
-        this.productId = productId;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public BigDecimal getPrice()
-    {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price)
-    {
-        this.price = price;
-    }
-
-    public int getCategoryId()
-    {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId)
-    {
-        this.categoryId = categoryId;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-
-    public String getColor()
-    {
-        return color;
-    }
-
-    public void setColor(String color)
-    {
-        this.color = color;
-    }
-
-    public int getStock()
-    {
-        return stock;
-    }
-
-    public void setStock(int stock)
-    {
-        this.stock = stock;
-    }
-
-    public boolean isFeatured()
-    {
-        return isFeatured;
-    }
-
-    public void setFeatured(boolean featured)
-    {
-        isFeatured = featured;
-    }
-
-    public String getImageUrl()
-    {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl)
-    {
-        this.imageUrl = imageUrl;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

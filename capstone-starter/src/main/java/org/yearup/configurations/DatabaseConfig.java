@@ -7,25 +7,22 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class DatabaseConfig
-{
-    private BasicDataSource basicDataSource;
-
-    @Bean
-    public BasicDataSource dataSource()
-    {
-        return basicDataSource;
-    }
+public class DatabaseConfig {
+    private final BasicDataSource basicDataSource;
 
     @Autowired
     public DatabaseConfig(@Value("${datasource.url}") String url,
                           @Value("${datasource.username}") String username,
-                          @Value("${datasource.password}") String password)
-    {
+                          @Value("${datasource.password}") String password) {
         basicDataSource = new BasicDataSource();
         basicDataSource.setUrl(url);
         basicDataSource.setUsername(username);
         basicDataSource.setPassword(password);
+    }
+
+    @Bean
+    public BasicDataSource dataSource() {
+        return basicDataSource;
     }
 
 }

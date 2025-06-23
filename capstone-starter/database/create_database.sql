@@ -4,11 +4,11 @@ USE sys;
 # Target DBMS:           MySQL                                           #
 # Project name:          EasyShop                                        #
 # ---------------------------------------------------------------------- #
-DROP DATABASE IF EXISTS easyshop;
+DROP DATABASE IF EXISTS easy_shop;
 
-CREATE DATABASE IF NOT EXISTS easyshop;
+CREATE DATABASE IF NOT EXISTS easy_shop;
 
-USE easyshop;
+USE easy_shop;
 
 # ---------------------------------------------------------------------- #
 # Tables                                                                 #

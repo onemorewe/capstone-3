@@ -1,49 +1,39 @@
 package org.yearup.models;
 
-public class Category
-{
-    private int categoryId;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.proxy.HibernateProxy;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.util.Objects;
+
+@Entity(name = "categories")
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+public class Category {
+    @Id
+    private Integer categoryId;
     private String name;
     private String description;
 
-    public Category()
-    {
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Category category = (Category) o;
+        return getCategoryId() != null && Objects.equals(getCategoryId(), category.getCategoryId());
     }
 
-    public Category(int categoryId, String name, String description)
-    {
-        this.categoryId = categoryId;
-        this.name = name;
-        this.description = description;
-    }
-
-    public int getCategoryId()
-    {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId)
-    {
-        this.categoryId = categoryId;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    public void setDescription(String description)
-    {
-        this.description = description;
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

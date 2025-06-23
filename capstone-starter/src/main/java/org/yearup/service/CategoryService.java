@@ -1,0 +1,11 @@
+package org.yearup.service;
+
+import org.yearup.models.Category;
+
+import java.util.List;
+
+public interface CategoryService {
+    List<Category> findAllCategories();
+
+    Category findById(int id);
+}
