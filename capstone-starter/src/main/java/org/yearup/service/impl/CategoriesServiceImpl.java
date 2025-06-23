@@ -26,4 +26,12 @@ public class CategoriesServiceImpl implements CategoryService {
                 .orElseThrow(() -> new RuntimeException("Category not found with id: " + id));
     }
 
+    @Override
+    public Category createCategory(Category category) {
+        if (category == null || category.getName() == null || category.getName().isEmpty()) {
+            throw new IllegalArgumentException("Category name cannot be null or empty");
+        }
+        return categoryRepository.save(category);
+    }
+
 }

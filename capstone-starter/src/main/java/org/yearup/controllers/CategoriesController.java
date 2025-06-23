@@ -1,12 +1,15 @@
 package org.yearup.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.models.Category;
 import org.yearup.models.Product;
 import org.yearup.service.CategoryService;
 import org.yearup.service.ProductService;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -33,11 +36,14 @@ public class CategoriesController {
         return productService.getProductsByCategoryId(categoryId);
     }
 
-    // add annotation to call this method for a POST action
-    // add annotation to ensure that only an ADMIN can call this function
-    public Category addCategory(@RequestBody Category category) {
-        // insert the category
-        return null;
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping
+    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
+        Category newCategory = categoryService.createCategory(category);
+        URI location = URI.create("/categories/" + newCategory.getCategoryId());
+        return ResponseEntity
+                .created(location)
+                .body(newCategory);
     }
 
     // add annotation to call this method for a PUT (update) action - the url path must include the categoryId

@@ -8,4 +8,6 @@ public interface CategoryService {
     List<Category> findAllCategories();
 
     Category findById(int id);
+
+    Category createCategory(Category category);
 }

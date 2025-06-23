@@ -7,6 +7,8 @@ import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Objects;
 
@@ -17,6 +19,7 @@ import java.util.Objects;
 @ToString
 public class Category {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryId;
     private String name;
     private String description;
