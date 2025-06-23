@@ -34,4 +34,16 @@ public class CategoriesServiceImpl implements CategoryService {
         return categoryRepository.save(category);
     }
 
+    @Override
+    public void updateCategory(int id, Category category) {
+        if (category == null || category.getName() == null || category.getName().isEmpty()) {
+            throw new IllegalArgumentException("Category name cannot be null or empty");
+        }
+        if (!categoryRepository.existsById(id)) {
+            throw new RuntimeException("Category not found with id: " + id);
+        }
+        category.setCategoryId(id);
+        categoryRepository.save(category);
+    }
+
 }
