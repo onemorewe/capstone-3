@@ -38,6 +38,7 @@ public class CategoriesController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Category> addCategory(@RequestBody Category category) {
         Category newCategory = categoryService.createCategory(category);
         URI location = URI.create("/categories/" + newCategory.getCategoryId());

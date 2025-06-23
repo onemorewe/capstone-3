@@ -11,5 +11,11 @@ public interface ProductService {
 
     List<Product> search(ProductFilter productFilter);
 
-    Product updateProduct(int productId, Product product);
+    void updateProduct(int productId, Product product);
+
+    Product getById(int id);
+
+    Product create(Product product);
+
+    void deleteProduct(int id);
 }

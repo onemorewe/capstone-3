@@ -3,9 +3,7 @@ package org.yearup.models;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -17,6 +15,7 @@ import java.util.Objects;
 @ToString
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer productId;
     private String name;
     private BigDecimal price;

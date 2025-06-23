@@ -2,7 +2,9 @@ package org.yearup.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.yearup.controllers.dto.ProductFilter;
 import org.yearup.data.mysql.ProductRepository;
 import org.yearup.models.Product;
@@ -29,12 +31,32 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(int productId, Product product) {
+    public void updateProduct(int productId, Product product) {
         if (!productRepository.existsById(productId)) {
             throw new IllegalArgumentException("Product with ID " + productId + " does not exist.");
         }
         product.setProductId(productId);
+        productRepository.save(product);
+    }
+
+    @Override
+    public Product getById(int id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Product with ID " + id + " does not exist."));
+    }
+
+    @Override
+    public Product create(Product product) {
         return productRepository.save(product);
+
+    }
+
+    @Override
+    public void deleteProduct(int id) {
+        if (!productRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product with ID " + id + " does not exist.");
+        }
+        productRepository.deleteById(id);
     }
 
     private Specification<Product> buildSpecification(ProductFilter productFilter) {

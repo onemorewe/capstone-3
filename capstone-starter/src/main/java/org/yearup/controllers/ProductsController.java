@@ -6,7 +6,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.controllers.dto.ProductFilter;
-import org.yearup.data.ProductDao;
 import org.yearup.models.Product;
 import org.yearup.service.ProductService;
 
@@ -18,7 +17,6 @@ import java.util.List;
 @CrossOrigin
 @RequiredArgsConstructor
 public class ProductsController {
-    private final ProductDao productDao;
     private final ProductService productService;
 
     @GetMapping
@@ -28,43 +26,26 @@ public class ProductsController {
                                 @RequestParam(name = "maxPrice", required = false) BigDecimal maxPrice,
                                 @RequestParam(name = "color", required = false) String color
     ) {
-        try {
-            ProductFilter productFilter = new ProductFilter(categoryId, minPrice, maxPrice, color);
-            return productService.search(productFilter);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
-        }
+        ProductFilter productFilter = new ProductFilter(categoryId, minPrice, maxPrice, color);
+        return productService.search(productFilter);
     }
 
     @GetMapping("{id}")
     @PreAuthorize("permitAll()")
     public Product getById(@PathVariable int id) {
-        try {
-            var product = productDao.getById(id);
-
-            if (product == null)
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-
-            return product;
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
-        }
+        return productService.getById(id);
     }
 
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     public Product addProduct(@RequestBody Product product) {
-        try {
-            return productDao.create(product);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
-        }
+        return productService.create(product);
     }
 
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateProduct(@PathVariable("id") int productId, @RequestBody Product product) {
         if (product.getProductId() != null && product.getProductId() != productId)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product ID in path does not match ID in body.");
@@ -73,16 +54,8 @@ public class ProductsController {
 
     @DeleteMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProduct(@PathVariable int id) {
-        try {
-            var product = productDao.getById(id);
-
-            if (product == null)
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-
-            productDao.delete(id);
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
-        }
+        productService.deleteProduct(id);
     }
 }
