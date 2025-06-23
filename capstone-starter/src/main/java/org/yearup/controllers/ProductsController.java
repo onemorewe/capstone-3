@@ -1,12 +1,14 @@
 package org.yearup.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.yearup.controllers.dto.ProductFilter;
 import org.yearup.data.ProductDao;
 import org.yearup.models.Product;
+import org.yearup.service.ProductService;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,13 +16,10 @@ import java.util.List;
 @RestController
 @RequestMapping("products")
 @CrossOrigin
+@RequiredArgsConstructor
 public class ProductsController {
     private final ProductDao productDao;
-
-    @Autowired
-    public ProductsController(ProductDao productDao) {
-        this.productDao = productDao;
-    }
+    private final ProductService productService;
 
     @GetMapping("")
     @PreAuthorize("permitAll()")
@@ -30,8 +29,10 @@ public class ProductsController {
                                 @RequestParam(name = "color", required = false) String color
     ) {
         try {
-            return productDao.search(categoryId, minPrice, maxPrice, color);
+            ProductFilter productFilter = new ProductFilter(categoryId, minPrice, maxPrice, color);
+            return productService.search(productFilter);
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
     }
