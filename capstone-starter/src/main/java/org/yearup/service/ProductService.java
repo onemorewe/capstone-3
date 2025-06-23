@@ -10,4 +10,6 @@ public interface ProductService {
     List<Product> getProductsByCategoryId(int categoryId);
 
     List<Product> search(ProductFilter productFilter);
+
+    Product updateProduct(int productId, Product product);
 }

@@ -21,7 +21,7 @@ public class ProductsController {
     private final ProductDao productDao;
     private final ProductService productService;
 
-    @GetMapping("")
+    @GetMapping
     @PreAuthorize("permitAll()")
     public List<Product> search(@RequestParam(name = "cat", required = false) Integer categoryId,
                                 @RequestParam(name = "minPrice", required = false) BigDecimal minPrice,
@@ -58,18 +58,17 @@ public class ProductsController {
         try {
             return productDao.create(product);
         } catch (Exception ex) {
+            ex.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
         }
     }
 
     @PutMapping("{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void updateProduct(@RequestBody Product product) {
-        try {
-            productDao.create(product);
-        } catch (Exception ex) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Oops... our bad.");
-        }
+    public void updateProduct(@PathVariable("id") int productId, @RequestBody Product product) {
+        if (product.getProductId() != null && product.getProductId() != productId)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product ID in path does not match ID in body.");
+        productService.updateProduct(productId, product);
     }
 
     @DeleteMapping("{id}")

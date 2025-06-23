@@ -28,6 +28,15 @@ public class ProductServiceImpl implements ProductService {
         return Collections.unmodifiableList(productRepository.findAll(productSpec));
     }
 
+    @Override
+    public Product updateProduct(int productId, Product product) {
+        if (!productRepository.existsById(productId)) {
+            throw new IllegalArgumentException("Product with ID " + productId + " does not exist.");
+        }
+        product.setProductId(productId);
+        return productRepository.save(product);
+    }
+
     private Specification<Product> buildSpecification(ProductFilter productFilter) {
         Specification<Product> spec = Specification.where(null);
 
