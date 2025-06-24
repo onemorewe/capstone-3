@@ -3,6 +3,7 @@ package org.yearup.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.yearup.controllers.dto.CartDto;
+import org.yearup.controllers.dto.CartUpdateDto;
 import org.yearup.data.mysql.ProductRepository;
 import org.yearup.data.mysql.ShoppingCartRepository;
 import org.yearup.data.mysql.UserRepository;
@@ -34,6 +35,9 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void addProductToCart(int productId, Principal principal) {
+        if (productId <= 0) {
+            throw new IllegalArgumentException("Product ID must be greater than zero");
+        }
         AppUser user = getUser(principal);
         Product product = productRepository.getReferenceById(productId);
         shoppingCartRepository.findByUserAndProduct(user, product).ifPresentOrElse(
@@ -51,6 +55,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         List<ShoppingCartItem> allByUser = shoppingCartRepository.findAllByUser(user);
         BigDecimal total = calculateTotal(allByUser);
         return cartMapper.toDto(allByUser, total);
+    }
+
+    @Override
+    public void updateProductInCart(int productId, CartUpdateDto cartUpdateDto, Principal principal) {
+        AppUser user = getUser(principal);
+        Product product = productRepository.getReferenceById(productId);
+        ShoppingCartItem shoppingCartItem = shoppingCartRepository.findByUserAndProduct(user, product)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found in cart"));
+
+        if (cartUpdateDto.getQuantity() <= 0) {
+            shoppingCartRepository.delete(shoppingCartItem);
+        } else {
+            shoppingCartItem.setQuantity(cartUpdateDto.getQuantity());
+            shoppingCartRepository.save(shoppingCartItem);
+        }
     }
 
     private void saveNewCartItem(AppUser user, Product product) {

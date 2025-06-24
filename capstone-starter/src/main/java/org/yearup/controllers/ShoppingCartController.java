@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.controllers.dto.CartDto;
+import org.yearup.controllers.dto.CartUpdateDto;
 import org.yearup.service.ShoppingCartService;
 
 import java.security.Principal;
@@ -21,9 +22,6 @@ public class ShoppingCartController {
     @PostMapping("/products/{productId}")
     @ResponseStatus(HttpStatus.CREATED)
     public void addProductToCart(@PathVariable int productId, Principal principal) {
-        if (productId <= 0) {
-            throw new IllegalArgumentException("Product ID must be greater than zero.");
-        }
         shoppingCartService.addProductToCart(productId, principal);
     }
 
@@ -32,9 +30,11 @@ public class ShoppingCartController {
         return shoppingCartService.getCart(principal);
     }
 
-    // add a PUT method to update an existing product in the cart - the url should be
-    // https://localhost:8080/cart/products/15 (15 is the productId to be updated)
-    // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated
+    @PatchMapping("/products/{productId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateProductInCart(@PathVariable int productId, @RequestBody CartUpdateDto cartUpdateDto, Principal principal) {
+        shoppingCartService.updateProductInCart(productId, cartUpdateDto, principal);
+    }
 
 
     // add a DELETE method to clear all products from the current users cart
