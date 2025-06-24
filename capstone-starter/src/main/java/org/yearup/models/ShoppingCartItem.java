@@ -1,60 +1,44 @@
 package org.yearup.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.proxy.HibernateProxy;
 
-import java.math.BigDecimal;
+import javax.persistence.*;
+import java.util.Objects;
 
-public class ShoppingCartItem
-{
-    private Product product = null;
-    private int quantity = 1;
-    private BigDecimal discountPercent = BigDecimal.ZERO;
+@Entity(name = "shopping_cart")
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+public class ShoppingCartItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private AppUser user;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+    private Integer quantity;
 
-
-    public Product getProduct()
-    {
-        return product;
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        ShoppingCartItem that = (ShoppingCartItem) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
     }
 
-    public void setProduct(Product product)
-    {
-        this.product = product;
-    }
-
-    public int getQuantity()
-    {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity)
-    {
-        this.quantity = quantity;
-    }
-
-    public BigDecimal getDiscountPercent()
-    {
-        return discountPercent;
-    }
-
-    public void setDiscountPercent(BigDecimal discountPercent)
-    {
-        this.discountPercent = discountPercent;
-    }
-
-    @JsonIgnore
-    public int getProductId()
-    {
-        return this.product.getProductId();
-    }
-
-    public BigDecimal getLineTotal()
-    {
-        BigDecimal basePrice = product.getPrice();
-        BigDecimal quantity = new BigDecimal(this.quantity);
-
-        BigDecimal subTotal = basePrice.multiply(quantity);
-        BigDecimal discountAmount = subTotal.multiply(discountPercent);
-
-        return subTotal.subtract(discountAmount);
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

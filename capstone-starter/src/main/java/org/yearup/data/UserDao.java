@@ -1,20 +1,20 @@
 package org.yearup.data;
 
-import org.yearup.models.User;
+import org.yearup.models.AppUser;
 
 import java.util.List;
 
 public interface UserDao {
 
-    List<User> getAll();
+    List<AppUser> getAll();
 
-    User getUserById(int userId);
+    AppUser getUserById(int userId);
 
-    User getByUserName(String username);
+    AppUser getByUserName(String username);
 
     int getIdByUsername(String username);
 
-    User create(User user);
+    AppUser create(AppUser appUser);
 
     boolean exists(String username);
 }

@@ -1,10 +1,10 @@
 package org.yearup.data.mysql;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.yearup.data.UserDao;
-import org.yearup.models.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.yearup.models.AppUser;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -22,24 +22,24 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
 
 
     @Override
-    public User create(User newUser)
+    public AppUser create(AppUser newAppUser)
     {
         String sql = "INSERT INTO users (username, hashed_password, role) VALUES (?, ?, ?)";
-        String hashedPassword = new BCryptPasswordEncoder().encode(newUser.getPassword());
+        String hashedPassword = new BCryptPasswordEncoder().encode(newAppUser.getPassword());
 
         try (Connection connection = getConnection())
         {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, newUser.getUsername());
+            ps.setString(1, newAppUser.getUsername());
             ps.setString(2, hashedPassword);
-            ps.setString(3, newUser.getRole());
+            ps.setString(3, newAppUser.getRole());
 
             ps.executeUpdate();
 
-            User user = getByUserName(newUser.getUsername());
-            user.setPassword("");
+            AppUser appUser = getByUserName(newAppUser.getUsername());
+            appUser.setPassword("");
 
-            return user;
+            return appUser;
 
         }
         catch (SQLException e)
@@ -49,9 +49,9 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
     }
 
     @Override
-    public List<User> getAll()
+    public List<AppUser> getAll()
     {
-        List<User> users = new ArrayList<>();
+        List<AppUser> appUsers = new ArrayList<>();
 
         String sql = "SELECT * FROM users";
         try (Connection connection = getConnection())
@@ -62,8 +62,8 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
 
             while (row.next())
             {
-                User user = mapRow(row);
-                users.add(user);
+                AppUser appUser = mapRow(row);
+                appUsers.add(appUser);
             }
         }
         catch (SQLException e)
@@ -71,11 +71,11 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
             throw new RuntimeException(e);
         }
 
-        return users;
+        return appUsers;
     }
 
     @Override
-    public User getUserById(int id)
+    public AppUser getUserById(int id)
     {
         String sql = "SELECT * FROM users WHERE user_id = ?";
         try (Connection connection = getConnection())
@@ -87,8 +87,8 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
 
             if(row.next())
             {
-                User user = mapRow(row);
-                return user;
+                AppUser appUser = mapRow(row);
+                return appUser;
             }
         }
         catch (SQLException e)
@@ -99,7 +99,7 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
     }
 
     @Override
-    public User getByUserName(String username)
+    public AppUser getByUserName(String username)
     {
         String sql = "SELECT * " +
                 " FROM users " +
@@ -114,8 +114,8 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
             if(row.next())
             {
 
-                User user = mapRow(row);
-                return user;
+                AppUser appUser = mapRow(row);
+                return appUser;
             }
         }
         catch (SQLException e)
@@ -129,11 +129,11 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
     @Override
     public int getIdByUsername(String username)
     {
-        User user = getByUserName(username);
+        AppUser appUser = getByUserName(username);
 
-        if(user != null)
+        if (appUser != null)
         {
-            return user.getId();
+            return appUser.getId();
         }
 
         return -1;
@@ -142,17 +142,17 @@ public class MySqlUserDao extends MySqlDaoBase implements UserDao
     @Override
     public boolean exists(String username)
     {
-        User user = getByUserName(username);
-        return user != null;
+        AppUser appUser = getByUserName(username);
+        return appUser != null;
     }
 
-    private User mapRow(ResultSet row) throws SQLException
+    private AppUser mapRow(ResultSet row) throws SQLException
     {
         int userId = row.getInt("user_id");
         String username = row.getString("username");
         String hashedPassword = row.getString("hashed_password");
         String role = row.getString("role");
 
-        return new User(userId, username,hashedPassword, role);
+        return new AppUser(userId, username, hashedPassword, role);
     }
 }

@@ -1,18 +1,18 @@
 package org.yearup.security;
 
 
-import org.yearup.data.UserDao;
-import org.yearup.models.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.yearup.data.UserDao;
+import org.yearup.models.AppUser;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Authenticate a user from the database.
@@ -35,15 +35,13 @@ public class UserModelDetailsService implements UserDetailsService {
         return createSpringSecurityUser(lowercaseLogin, userDao.getByUserName(lowercaseLogin));
     }
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
-        if (!user.isActivated()) {
+    private User createSpringSecurityUser(String lowercaseLogin, AppUser appUser) {
+        if (!appUser.isActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
-        List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getName()))
-                .collect(Collectors.toList());
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(),
+        List<GrantedAuthority> grantedAuthorities = List.of(new SimpleGrantedAuthority(appUser.getRole()));
+        return new User(appUser.getUsername(),
+                appUser.getPassword(),
                 grantedAuthorities);
     }
 }

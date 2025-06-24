@@ -26,7 +26,7 @@ class UserService {
             token: user.token,
             userId: user.user.id,
             username: user.user.username,
-            role: user.user.authorities[0].name
+            role: user.user.authority
         }
         localStorage.setItem('user', JSON.stringify(this.currentUser));
     }
