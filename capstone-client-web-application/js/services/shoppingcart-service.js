@@ -151,12 +151,7 @@ class ShoppingCartService {
                      items: [],
                      total: 0
                  }
-
-                 this.cart.total = response.data.total;
-
-                 for (const [key, value] of Object.entries(response.data.items)) {
-                     this.cart.items.push(value);
-                 }
+                 
 
                  this.updateCartDisplay()
                  this.loadCartPage()

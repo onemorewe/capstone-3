@@ -59,10 +59,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void updateProductInCart(int productId, CartUpdateDto cartUpdateDto, Principal principal) {
-        AppUser user = getUser(principal);
-        Product product = productRepository.getReferenceById(productId);
-        ShoppingCartItem shoppingCartItem = shoppingCartRepository.findByUserAndProduct(user, product)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found in cart"));
+        ShoppingCartItem shoppingCartItem = getUserCartItemByProductId(productId, principal);
 
         if (cartUpdateDto.getQuantity() <= 0) {
             shoppingCartRepository.delete(shoppingCartItem);
@@ -70,6 +67,23 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             shoppingCartItem.setQuantity(cartUpdateDto.getQuantity());
             shoppingCartRepository.save(shoppingCartItem);
         }
+    }
+
+    private ShoppingCartItem getUserCartItemByProductId(int productId, Principal principal) {
+        AppUser user = getUser(principal);
+        Product product = productRepository.getReferenceById(productId);
+        return shoppingCartRepository.findByUserAndProduct(user, product)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found in cart"));
+    }
+
+    @Override
+    public void emptyCart(Principal principal) {
+        AppUser user = getUser(principal);
+        List<ShoppingCartItem> userCartItems = shoppingCartRepository.findAllByUser(user);
+        if (userCartItems.isEmpty()) {
+            return;
+        }
+        shoppingCartRepository.deleteAll(userCartItems);
     }
 
     private void saveNewCartItem(AppUser user, Product product) {

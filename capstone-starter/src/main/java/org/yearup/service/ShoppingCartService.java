@@ -11,4 +11,6 @@ public interface ShoppingCartService {
     CartDto getCart(Principal principal);
 
     void updateProductInCart(int productId, CartUpdateDto cartUpdateDto, Principal principal);
+
+    void emptyCart(Principal principal);
 }
