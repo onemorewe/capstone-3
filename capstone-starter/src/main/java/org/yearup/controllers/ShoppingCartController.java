@@ -1,13 +1,11 @@
 package org.yearup.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.yearup.data.mysql.ProductRepository;
-import org.yearup.data.mysql.ShoppingCartRepository;
-import org.yearup.data.mysql.UserRepository;
-import org.yearup.models.AppUser;
-import org.yearup.models.ShoppingCartItem;
+import org.yearup.controllers.dto.CartDto;
+import org.yearup.service.ShoppingCartService;
 
 import java.security.Principal;
 
@@ -17,39 +15,21 @@ import java.security.Principal;
 @CrossOrigin
 @RequiredArgsConstructor
 public class ShoppingCartController {
-    private final UserRepository userRepository;
-    private final ShoppingCartRepository shoppingCartRepository;
-    private final ProductRepository productRepository;
 
-    // each method in this controller requires a Principal object as a parameter
-
-
-    // add a POST method to add a product to the cart - the url should be
-    // https://localhost:8080/cart/products/15 (15 is the productId to be added
+    private final ShoppingCartService shoppingCartService;
 
     @PostMapping("/products/{productId}")
+    @ResponseStatus(HttpStatus.CREATED)
     public void addProductToCart(@PathVariable int productId, Principal principal) {
-        AppUser user = getUser(principal);
-        shoppingCartRepository.findByUser_IdAndProduct_ProductId(user.getId(), productId).ifPresentOrElse(
-                item -> {
-                    item.setQuantity(item.getQuantity() + 1);
-                    shoppingCartRepository.save(item);
-                },
-                () -> saveNewCartItem(user, productId)
-        );
+        if (productId <= 0) {
+            throw new IllegalArgumentException("Product ID must be greater than zero.");
+        }
+        shoppingCartService.addProductToCart(productId, principal);
     }
 
-    private void saveNewCartItem(AppUser user, int productId) {
-        ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
-        shoppingCartItem.setUser(user);
-        shoppingCartItem.setProduct(productRepository.getReferenceById(productId));
-        shoppingCartItem.setQuantity(1);
-        shoppingCartRepository.save(shoppingCartItem);
-    }
-
-    private AppUser getUser(Principal principal) {
-        String userName = principal.getName();
-        return userRepository.getUserByUsername(userName);
+    @GetMapping
+    public CartDto getCart(Principal principal) {
+        return shoppingCartService.getCart(principal);
     }
 
     // add a PUT method to update an existing product in the cart - the url should be

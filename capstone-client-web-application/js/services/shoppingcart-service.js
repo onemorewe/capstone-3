@@ -13,9 +13,8 @@ class ShoppingCartService {
         // const headers = userService.getHeaders();
 
         axios.post(url, {})// ,{headers})
-            .then(response => {
-                this.setCart(response.data)
-
+            .then(()=> {
+                this.loadCart()
                 this.updateCartDisplay()
 
             })

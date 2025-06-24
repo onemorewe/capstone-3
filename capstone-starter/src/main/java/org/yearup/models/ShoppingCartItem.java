@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity(name = "shopping_cart")
@@ -21,10 +22,13 @@ public class ShoppingCartItem {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private AppUser user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
+    @ToString.Exclude
     private Product product;
     private Integer quantity;
+    @Transient
+    private BigDecimal discountPercent = BigDecimal.ZERO;
 
     @Override
     public final boolean equals(Object o) {
