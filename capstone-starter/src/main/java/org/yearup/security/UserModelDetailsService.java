@@ -1,6 +1,7 @@
 package org.yearup.security;
 
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import org.yearup.data.UserDao;
+import org.yearup.data.mysql.UserRepository;
 import org.yearup.models.AppUser;
 
 import java.util.List;
@@ -18,21 +19,19 @@ import java.util.List;
  * Authenticate a user from the database.
  */
 @Component("userDetailsService")
+@RequiredArgsConstructor
 public class UserModelDetailsService implements UserDetailsService {
 
     private final Logger log = LoggerFactory.getLogger(UserModelDetailsService.class);
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
 
-    public UserModelDetailsService(UserDao userDao) {
-        this.userDao = userDao;
-    }
 
     @Override
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating user '{}'", login);
         String lowercaseLogin = login.toLowerCase();
-        return createSpringSecurityUser(lowercaseLogin, userDao.getByUserName(lowercaseLogin));
+        return createSpringSecurityUser(lowercaseLogin, userRepository.getByUsername(lowercaseLogin));
     }
 
     private User createSpringSecurityUser(String lowercaseLogin, AppUser appUser) {

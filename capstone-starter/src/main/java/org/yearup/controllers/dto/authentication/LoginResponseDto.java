@@ -1,4 +1,4 @@
-package org.yearup.models.authentication;
+package org.yearup.controllers.dto.authentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

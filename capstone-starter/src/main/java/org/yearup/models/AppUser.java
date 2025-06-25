@@ -27,7 +27,7 @@ public class AppUser {
     private String password;
     @JsonIgnore
     @Transient
-    private boolean activated;
+    private boolean activated = true;
     @Column(name = "role")
     private String authority;
 

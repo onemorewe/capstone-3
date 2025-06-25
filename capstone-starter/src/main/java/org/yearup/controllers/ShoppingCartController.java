@@ -41,9 +41,4 @@ public class ShoppingCartController {
     public void emptyCart(Principal principal) {
         shoppingCartService.emptyCart(principal);
     }
-
-
-    // add a DELETE method to clear all products from the current users cart
-    // https://localhost:8080/cart
-
 }
