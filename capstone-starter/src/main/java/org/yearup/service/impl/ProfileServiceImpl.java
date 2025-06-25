@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import org.yearup.controllers.dto.UpdateProfileDto;
+import org.yearup.controllers.dto.ProfileDto;
 import org.yearup.data.mysql.ProfileRepository;
 import org.yearup.mapper.ProfileMapper;
 import org.yearup.models.AppUser;
@@ -30,7 +30,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void updateProfile(Principal principal, UpdateProfileDto profile) {
+    public void updateProfile(Principal principal, ProfileDto profile) {
         AppUser user = principalService.getUserByPrincipal(principal);
         Profile existingProfile = profileRepository.findByUser(user);
         if (existingProfile == null) {
@@ -39,5 +39,15 @@ public class ProfileServiceImpl implements ProfileService {
         profileMapper.updateProfileFromDto(profile, existingProfile);
 
         profileRepository.save(existingProfile);
+    }
+
+    @Override
+    public ProfileDto getProfile(Principal principal) {
+        AppUser user = principalService.getUserByPrincipal(principal);
+        Profile profile = profileRepository.findByUser(user);
+        if (profile == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found for user: " + user.getUsername());
+        }
+        return profileMapper.toDto(profile);
     }
 }

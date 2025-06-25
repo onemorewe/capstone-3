@@ -3,7 +3,7 @@ package org.yearup.controllers.dto;
 import lombok.Data;
 
 @Data
-public class UpdateProfileDto {
+public class ProfileDto {
     private String firstName;
     private String lastName;
     private String phone;
