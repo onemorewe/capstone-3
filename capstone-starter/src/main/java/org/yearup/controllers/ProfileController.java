@@ -2,6 +2,7 @@ package org.yearup.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yearup.controllers.dto.ProfileDto;
 import org.yearup.service.ProfileService;
@@ -12,6 +13,7 @@ import java.security.Principal;
 @RequestMapping("/profile")
 @RequiredArgsConstructor
 @CrossOrigin
+@PreAuthorize("hasRole('ROLE_USER')")
 public class ProfileController {
 
     private final ProfileService profileService;
