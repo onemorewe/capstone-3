@@ -51,10 +51,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public CartDto getCart(Principal principal) {
-        AppUser user = principalService.getUserByPrincipal(principal);
-        List<ShoppingCartItem> allByUser = shoppingCartRepository.findAllByUser(user);
+        List<ShoppingCartItem> allByUser = getShoppingCartItems(principal);
         BigDecimal total = calculateTotal(allByUser);
         return cartMapper.toDto(allByUser, total);
+    }
+
+    @Override
+    public List<ShoppingCartItem> getShoppingCartItems(Principal principal) {
+        AppUser user = principalService.getUserByPrincipal(principal);
+        return shoppingCartRepository.findAllByUser(user);
     }
 
     @Override
@@ -78,8 +83,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void emptyCart(Principal principal) {
-        AppUser user = principalService.getUserByPrincipal(principal);
-        List<ShoppingCartItem> userCartItems = shoppingCartRepository.findAllByUser(user);
+        List<ShoppingCartItem> userCartItems = getShoppingCartItems(principal);
         if (userCartItems.isEmpty()) {
             return;
         }

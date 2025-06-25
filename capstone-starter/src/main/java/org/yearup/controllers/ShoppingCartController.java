@@ -20,7 +20,7 @@ public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
     @PostMapping("/products/{productId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addProductToCart(@PathVariable int productId, Principal principal) {
         shoppingCartService.addProductToCart(productId, principal);
     }
