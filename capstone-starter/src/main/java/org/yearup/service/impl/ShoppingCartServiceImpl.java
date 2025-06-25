@@ -6,11 +6,11 @@ import org.yearup.controllers.dto.CartDto;
 import org.yearup.controllers.dto.CartUpdateDto;
 import org.yearup.data.mysql.ProductRepository;
 import org.yearup.data.mysql.ShoppingCartRepository;
-import org.yearup.data.mysql.UserRepository;
 import org.yearup.mapper.CartMapper;
 import org.yearup.models.AppUser;
 import org.yearup.models.Product;
 import org.yearup.models.ShoppingCartItem;
+import org.yearup.service.PrincipalService;
 import org.yearup.service.ShoppingCartService;
 
 import java.math.BigDecimal;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
-    private final UserRepository userRepository;
+    private final PrincipalService principalService;
     private final ShoppingCartRepository shoppingCartRepository;
     private final ProductRepository productRepository;
     private final CartMapper cartMapper;
@@ -38,7 +38,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (productId <= 0) {
             throw new IllegalArgumentException("Product ID must be greater than zero");
         }
-        AppUser user = getUser(principal);
+        AppUser user = principalService.getUserByPrincipal(principal);
         Product product = productRepository.getReferenceById(productId);
         shoppingCartRepository.findByUserAndProduct(user, product).ifPresentOrElse(
                 item -> {
@@ -51,7 +51,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public CartDto getCart(Principal principal) {
-        AppUser user = getUser(principal);
+        AppUser user = principalService.getUserByPrincipal(principal);
         List<ShoppingCartItem> allByUser = shoppingCartRepository.findAllByUser(user);
         BigDecimal total = calculateTotal(allByUser);
         return cartMapper.toDto(allByUser, total);
@@ -70,7 +70,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     private ShoppingCartItem getUserCartItemByProductId(int productId, Principal principal) {
-        AppUser user = getUser(principal);
+        AppUser user = principalService.getUserByPrincipal(principal);
         Product product = productRepository.getReferenceById(productId);
         return shoppingCartRepository.findByUserAndProduct(user, product)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found in cart"));
@@ -78,7 +78,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void emptyCart(Principal principal) {
-        AppUser user = getUser(principal);
+        AppUser user = principalService.getUserByPrincipal(principal);
         List<ShoppingCartItem> userCartItems = shoppingCartRepository.findAllByUser(user);
         if (userCartItems.isEmpty()) {
             return;
@@ -92,10 +92,5 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         shoppingCartItem.setProduct(product);
         shoppingCartItem.setQuantity(1);
         shoppingCartRepository.save(shoppingCartItem);
-    }
-
-    private AppUser getUser(Principal principal) {
-        String userName = principal.getName();
-        return userRepository.getUserByUsername(userName);
     }
 }

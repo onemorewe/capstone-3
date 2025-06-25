@@ -13,12 +13,11 @@ import org.springframework.web.server.ResponseStatusException;
 import org.yearup.controllers.dto.authentication.LoginDto;
 import org.yearup.controllers.dto.authentication.LoginResponseDto;
 import org.yearup.controllers.dto.authentication.RegisterUserDto;
-import org.yearup.data.mysql.ProfileRepository;
 import org.yearup.data.mysql.UserRepository;
 import org.yearup.models.AppUser;
-import org.yearup.models.Profile;
 import org.yearup.security.jwt.TokenProvider;
 import org.yearup.service.AuthenticationService;
+import org.yearup.service.ProfileService;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final UserRepository userRepository;
-    private final ProfileRepository profileRepository;
+    private final ProfileService profileService;
 
 
     @Override
@@ -56,15 +55,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // hash password
         String hashedPassword = new BCryptPasswordEncoder().encode(newUser.getPassword());
 
-        // create user
         AppUser appUser = userRepository.save(new AppUser(0, newUser.getUsername(), hashedPassword, newUser.getRole()));
 
-        // create profile
         if (newUser.getRole().equals("USER")) {
-            System.out.println("Creating profile for user: " + appUser.getUsername());
-            Profile profile = new Profile();
-            profile.setUser(appUser);
-            profileRepository.save(profile);
+            profileService.createEmptyProfile(appUser);
         }
 
         return appUser;
