@@ -9,7 +9,6 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 public class CartDto {
-
     private Map<Integer, CartItemDto> items;
     private BigDecimal total;
 }

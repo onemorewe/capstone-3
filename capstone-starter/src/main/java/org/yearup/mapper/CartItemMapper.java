@@ -11,7 +11,6 @@ import java.math.RoundingMode;
 @Mapper(componentModel = "spring", uses = ProductMapper.class)
 public interface CartItemMapper {
 
-
     @Mapping(target = "lineTotal", expression = "java(calculateLineTotal(entity))")
     CartItemDto toDto(ShoppingCartItem entity);
 
