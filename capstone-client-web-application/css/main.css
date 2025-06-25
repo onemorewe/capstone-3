@@ -1,3 +1,9 @@
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f3f3 100%);
+}
+
 header
 {
     display: flex;
@@ -8,7 +14,8 @@ header
 
     padding: 5px 15px;
     border-bottom: solid 1px #555;
-    box-shadow: 5px 2px #eee;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #f8f9fa;
 }
 
 header img
@@ -26,7 +33,7 @@ header #links
 {
     gap: 20px;
     justify-content: flex-start;
-    align-items: flex-end;
+    align-items: center;
     padding-right: 20px;
 }
 
@@ -58,6 +65,9 @@ main > .filter-box
 {
     width: 350px;
     padding: 15px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 main #min-price .slider-selection {
@@ -69,6 +79,7 @@ main > .content
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     width: 100%;
+    gap: 10px;
     height: 87vh;
     overflow: scroll;
 }
@@ -123,6 +134,7 @@ main > .content-form .cart-item
     padding: 5px;
     border-radius: 5px;
     margin: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 .product  .photo
 {
