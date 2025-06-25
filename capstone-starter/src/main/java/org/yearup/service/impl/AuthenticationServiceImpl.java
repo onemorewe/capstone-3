@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.yearup.controllers.dto.authentication.LoginDto;
 import org.yearup.controllers.dto.authentication.LoginResponseDto;
 import org.yearup.controllers.dto.authentication.RegisterUserDto;
-import org.yearup.data.mysql.UserRepository;
+import org.yearup.data.UserRepository;
 import org.yearup.models.AppUser;
 import org.yearup.security.jwt.TokenProvider;
 import org.yearup.service.AuthenticationService;

@@ -13,7 +13,6 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface OrderItemMapper {
 
-
     LinkedList<OrderLineItem> toOrderLineItems(List<ShoppingCartItem> shoppingCartItems, @Context Order order);
 
     @Mapping(target = "discount", source = "shoppingCartItem.discountPercent")

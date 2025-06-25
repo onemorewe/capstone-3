@@ -8,5 +8,4 @@ import org.yearup.models.Product;
 public interface ProductMapper {
 
     ProductDto toDto(Product entity);
-
 }

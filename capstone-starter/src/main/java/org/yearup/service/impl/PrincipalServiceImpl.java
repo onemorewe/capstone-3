@@ -2,7 +2,7 @@ package org.yearup.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.yearup.data.mysql.UserRepository;
+import org.yearup.data.UserRepository;
 import org.yearup.models.AppUser;
 import org.yearup.service.PrincipalService;
 

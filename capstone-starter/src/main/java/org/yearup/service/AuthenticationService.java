@@ -6,8 +6,6 @@ import org.yearup.controllers.dto.authentication.RegisterUserDto;
 import org.yearup.models.AppUser;
 
 public interface AuthenticationService {
-
-
     LoginResponseDto login(LoginDto loginDto);
 
     AppUser register(RegisterUserDto newUser);

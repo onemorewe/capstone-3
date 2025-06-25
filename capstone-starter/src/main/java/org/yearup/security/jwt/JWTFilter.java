@@ -1,5 +1,6 @@
 package org.yearup.security.jwt;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -18,17 +19,15 @@ import java.io.IOException;
  * Filters incoming requests and installs a Spring Security principal if a header corresponding to a valid user is
  * found.
  */
+@RequiredArgsConstructor
 public class JWTFilter extends GenericFilterBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(JWTFilter.class);
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
-    private TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
-    public JWTFilter(TokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
-    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
