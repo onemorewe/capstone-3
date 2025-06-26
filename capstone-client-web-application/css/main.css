@@ -1,7 +1,7 @@
 body {
     margin: 0;
-    font-family: "Roboto", Arial, sans-serif;
-    background: #f5f7fa;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f3f3 100%);
 }
 
 header
@@ -9,24 +9,18 @@ header
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 60px;
-    padding: 0 20px;
-    background-color: #343a40;
-    color: #ffffff;
-}
 
-header a {
-    color: #ffffff;
-    text-decoration: none;
-}
+    height: 10vh;
 
-header a:hover {
-    text-decoration: underline;
+    padding: 5px 15px;
+    border-bottom: solid 1px #555;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #f8f9fa;
 }
 
 header img
 {
-    height: 40px;
+    height: 100%;
 }
 
 header div{
@@ -45,39 +39,35 @@ header #links
 
 header .cart
 {
-    font-size: 1.5rem;
-    position: relative;
+    font-size: x-large;
+    padding-left: 10px;
+    padding-right: 10px;
     cursor: pointer;
 }
 
 header .cart #cart-items
 {
-    position: absolute;
-    top: -8px;
-    right: -10px;
-    background: #dc3545;
-    color: white;
-    font-size: .7rem;
-    padding: 2px 6px;
-    border-radius: 50%;
+    font-size: .7em;
+    height: 50%;
+    align-items: start;
+    padding-left: 5px;
 }
 
 main
 {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    height: calc(100vh - 60px);
+    display: grid;
+    grid-template-columns: 350px auto;
+    margin-top: 15px;
+    height: 87vh;
 }
 
 main > .filter-box
 {
-    width: 250px;
+    width: 350px;
     padding: 15px;
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
 }
 
 main #min-price .slider-selection {
@@ -86,8 +76,12 @@ main #min-price .slider-selection {
 
 main > .content
 {
-    flex-grow: 1;
-    overflow-y: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+    gap: 10px;
+    height: 87vh;
+    overflow: scroll;
 }
 
 main > .content-form
@@ -129,12 +123,36 @@ main > .content-form .cart-item
     color: maroon;
 }
 
-.product {
-    height: 100%;
+.product
+{
+    display: flex;
+    flex-direction: column;
+
+    justify-content: space-between;
+    /*width: 30%;*/
+    border: solid 1px #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
-.product .price {
-    font-weight: 700;
-    color: #0d6efd;
+.product  .photo
+{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px 10px 10px;
+}
+.product  .photo > img
+{
+    width: 33%;
+    cursor: pointer;
+    border: solid 1px #ccc;
+}
+
+.product .price
+{
+    font-weight: 900;
+    color: #924a24;
 }
 
 .modal-body img
@@ -142,6 +160,10 @@ main > .content-form .cart-item
     width:100%;
 }
 
+.product > .add-button
+{
+    display: flex;
+}
 
 .visible
 {
