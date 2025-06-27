@@ -5,10 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.controllers.dto.ProfileDto;
-import org.yearup.data.ProfileRepository;
 import org.yearup.mapper.ProfileMapper;
 import org.yearup.models.AppUser;
 import org.yearup.models.Profile;
+import org.yearup.repository.ProfileRepository;
 import org.yearup.service.PrincipalService;
 import org.yearup.service.ProfileService;
 

@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.yearup.controllers.dto.ProductFilter;
-import org.yearup.data.ProductRepository;
 import org.yearup.models.Product;
+import org.yearup.repository.ProductRepository;
 import org.yearup.service.ProductService;
 
 import java.util.Collections;

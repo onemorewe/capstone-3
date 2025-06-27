@@ -6,13 +6,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
-import org.yearup.data.OrderRepository;
-import org.yearup.data.ProfileRepository;
 import org.yearup.mapper.OrderItemMapper;
 import org.yearup.mapper.OrderMapper;
 import org.yearup.models.AppUser;
 import org.yearup.models.Profile;
 import org.yearup.models.ShoppingCartItem;
+import org.yearup.repository.OrderRepository;
+import org.yearup.repository.ProfileRepository;
 import org.yearup.service.PrincipalService;
 import org.yearup.service.ShoppingCartService;
 

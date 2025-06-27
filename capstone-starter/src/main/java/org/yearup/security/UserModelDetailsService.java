@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import org.yearup.data.UserRepository;
 import org.yearup.models.AppUser;
+import org.yearup.repository.UserRepository;
 
 import java.util.List;
 

@@ -2,8 +2,8 @@ package org.yearup.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.yearup.data.CategoryRepository;
 import org.yearup.models.Category;
+import org.yearup.repository.CategoryRepository;
 import org.yearup.service.CategoryService;
 
 import java.util.Collections;

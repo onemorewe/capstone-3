@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.yearup.controllers.dto.CartDto;
 import org.yearup.controllers.dto.CartUpdateDto;
-import org.yearup.data.ProductRepository;
-import org.yearup.data.ShoppingCartRepository;
 import org.yearup.mapper.CartMapper;
 import org.yearup.models.AppUser;
 import org.yearup.models.Product;
 import org.yearup.models.ShoppingCartItem;
+import org.yearup.repository.ProductRepository;
+import org.yearup.repository.ShoppingCartRepository;
 import org.yearup.service.PrincipalService;
 import org.yearup.service.ShoppingCartService;
 
