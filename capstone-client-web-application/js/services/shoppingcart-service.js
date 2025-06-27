@@ -16,7 +16,10 @@ class ShoppingCartService {
             .then(()=> {
                 this.loadCart()
                 this.updateCartDisplay()
-
+                const data = {
+                    message: "Product added to cart successfully!"
+                };
+                templateBuilder.append("message", data, "errors")
             })
             .catch(error => {
 
@@ -65,77 +68,82 @@ class ShoppingCartService {
 
     }
 
-    loadCartPage()
-    {
-        // templateBuilder.build("cart", this.cart, "main");
+    placeOrder(){
+        const url = `${config.baseUrl}/orders`;
 
-        const main = document.getElementById("main")
-        main.innerHTML = "";
+        axios.post(url)
+            .then(response => {
+                this.cart = {
+                    items: [],
+                    total: 0
+                };
+                this.updateCartDisplay();
+                this.loadCartPage();
+                const data = {
+                    message: "Order successfully placed!"
+                };
+                templateBuilder.append("message", data, "errors")
+            })
+            .catch(error => {
 
-        let div = document.createElement("div");
-        div.classList="filter-box";
-        main.appendChild(div);
+                const data = {
+                    error: "Order placement failed."
+                };
 
-        const contentDiv = document.createElement("div")
-        contentDiv.id = "content";
-        contentDiv.classList.add("content-form");
-
-        const cartHeader = document.createElement("div")
-        cartHeader.classList.add("cart-header")
-
-        const h1 = document.createElement("h1")
-        h1.innerText = "Cart";
-        cartHeader.appendChild(h1);
-
-        const button = document.createElement("button");
-        button.classList.add("btn")
-        button.classList.add("btn-danger")
-        button.innerText = "Clear";
-        button.addEventListener("click", () => this.clearCart());
-        cartHeader.appendChild(button)
-
-        contentDiv.appendChild(cartHeader)
-        main.appendChild(contentDiv);
-
-        // let parent = document.getElementById("cart-item-list");
-        this.cart.items.forEach(item => {
-            this.buildItem(item, contentDiv)
-        });
+                templateBuilder.append("error", data, "errors")
+            })
     }
 
+    loadCartPage()
+    {
+        templateBuilder.build("cart", this.cart, "main", () => {
+            const itemList = document.getElementById("cart-item-list");
+            this.cart.items.forEach(item => {
+                this.buildItem(item, itemList)
+            });
+
+            const total = document.getElementById("cart-total");
+            total.innerText = `$${this.cart.total.toFixed(2)}`;
+        });
+    }
     buildItem(item, parent)
     {
         let outerDiv = document.createElement("div");
         outerDiv.classList.add("cart-item");
 
-        let div = document.createElement("div");
-        outerDiv.appendChild(div);
-        let h4 = document.createElement("h4")
-        h4.innerText = item.product.name;
-        div.appendChild(h4);
-
         let photoDiv = document.createElement("div");
-        photoDiv.classList.add("photo")
+        photoDiv.classList.add("photo");
         let img = document.createElement("img");
-        img.src = `/images/products/${item.product.imageUrl}`
+        img.src = `/images/products/${item.product.imageUrl}`;
         img.addEventListener("click", () => {
-            showImageDetailForm(item.product.name, img.src)
-        })
-        photoDiv.appendChild(img)
-        let priceH4 = document.createElement("h4");
-        priceH4.classList.add("price");
-        priceH4.innerText = `$${item.product.price}`;
-        photoDiv.appendChild(priceH4);
+            showImageDetailForm(item.product.name, img.src);
+        });
+        photoDiv.appendChild(img);
         outerDiv.appendChild(photoDiv);
 
+        let detailsDiv = document.createElement("div");
+        detailsDiv.classList.add("cart-item-details");
+        outerDiv.appendChild(detailsDiv);
+
+        let h4 = document.createElement("h4");
+        h4.classList.add("cart-item-name");
+        h4.innerText = item.product.name;
+        detailsDiv.appendChild(h4);
+
         let descriptionDiv = document.createElement("div");
+        descriptionDiv.classList.add("cart-item-desc");
         descriptionDiv.innerText = item.product.description;
-        outerDiv.appendChild(descriptionDiv);
+        detailsDiv.appendChild(descriptionDiv);
 
-        let quantityDiv = document.createElement("div")
+        let priceH4 = document.createElement("h4");
+        priceH4.classList.add("cart-item-price");
+        priceH4.innerText = `$${item.product.price}`;
+        detailsDiv.appendChild(priceH4);
+
+        let quantityDiv = document.createElement("div");
+        quantityDiv.classList.add("cart-item-qty");
         quantityDiv.innerText = `Quantity: ${item.quantity}`;
-        outerDiv.appendChild(quantityDiv)
-
+        detailsDiv.appendChild(quantityDiv);
 
         parent.appendChild(outerDiv);
     }

@@ -1,27 +1,41 @@
-
 {{#loggedin}}
-<div id="links">
-    <img src="/images/logo.png" alt="eashshop logo">
-    <a href="#" onclick="loadHome()">Home</a>
-    <a href="#" onclick="editProfile()">Profile</a>
-    <a href="#" onclick="showCart()">View Cart</a>
-</div>
-
-<div>
-    Welcome&nbsp;<span style="font-weight: bold">{{username}}</span>&nbsp;|&nbsp;<a href="#" onclick="userService.logout();return false;">logout</a>
-    <div class="cart" onclick="showCart()">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <div id="cart-items">0</div>
+<nav class="main-header">
+    <div class="logo">
+        <img src="/images/logo.png" alt="eashop logo" onclick="loadHome()">
+        <span class="logo-text" onclick="loadHome()">Shop with us</span>
     </div>
-</div>
-{{/loggedin}}
-{{#loggedout}}
-<div id="links">
-    <img src="/images/logo.png" alt="eashshop logo">
-    <a href="#" onclick="loadHome()">Home</a>
-</div>
+    <div class="nav-links">
+        <a href="#" onclick="loadHome()">Home</a>
 
-<div>
-    <a href="#"  onclick="showLoginForm();return false;">login</a>
-</div>
+        <a href="#" onclick="editProfile()">Profile</a>
+        <a href="#" onclick="showCart()">View Cart</a>
+
+    </div>
+    <div class="user-actions">
+
+        <div class="welcome-message">Welcome, <strong>{{username}}</strong></div>
+        <a href="#" class="logout-link" onclick="userService.logout();return false;">Logout</a>
+        <div class="cart-icon" onclick="showCart()">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span id="cart-items" class="cart-item-count">0</span>
+        </div>
+
+    </div>
+</nav>
+{{/loggedin}}
+
+{{#loggedout}}
+<nav class="main-header">
+    <div class="logo">
+        <img src="/images/logo.png" alt="eashop logo" onclick="loadHome()">
+        <span class="logo-text" onclick="loadHome()">EashShop</span>
+    </div>
+    <div class="nav-links">
+        <a href="#" onclick="loadHome()">Home</a>
+
+    </div>
+    <div class="user-actions">
+        <a href="#" class="login-link" onclick="showLoginForm();return false;">Login</a>
+    </div>
+</nav>
 {{/loggedout}}

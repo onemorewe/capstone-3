@@ -1,16 +1,12 @@
-
-<div class="filter-box">
-  &nbsp;
-
-</div>
-<div id="content" class="content-form">
-  <div class="cart-header">
-    <h1>Cart</h1>
-    <button class="btn btn-danger" onclick="clearCart()">Clear</button>
+<div id="cart-layout" class="cart-layout">
+  <div id="cart-item-list" class="cart-item-list"></div>
+  <div id="cart-summary" class="cart-summary">
+    <h2>Order Summary</h2>
+    <div class="cart-total-label">Total:</div>
+    <div id="cart-total" class="cart-total-value">$0.00</div>
+    <button class="btn btn-success w-100 mb-2" onclick="placeOrder()">Place Order</button>
+    <button class="btn btn-danger w-100" onclick="clearCart()">Clear Cart</button>
   </div>
-<div id="cart-item-list">
-</div>
-
 </div>
 
 

@@ -77,6 +77,10 @@ function clearCart()
     cartService.loadCartPage();
 }
 
+function placeOrder(){
+    cartService.placeOrder();
+}
+
 function setCategory(control)
 {
     productService.addCategoryFilter(control.value);
