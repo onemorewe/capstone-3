@@ -14,6 +14,7 @@ import org.yearup.service.PrincipalService;
 import org.yearup.service.ShoppingCartService;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.Principal;
 import java.util.List;
 
@@ -28,9 +29,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private static BigDecimal calculateTotal(List<ShoppingCartItem> allByUser) {
         return allByUser.stream()
-                .map(ShoppingCartItem::getProduct)
-                .map(Product::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override
