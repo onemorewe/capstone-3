@@ -9,6 +9,19 @@ curriculum provided by [Pluralsight](https://www.pluralsight.com/).
 
 Guidance provided by Pluralsight instructor [Craig McKeachie](https://www.linkedin.com/in/craigmckeachie/).
 
+---
+## Table of Contents
+- [Project Description](#project-description)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [API Endpoints](#api-endpoints)
+- [Database Schema](#database-schema)
+- [How to Run the Application](#how-to-run-the-application)
+- [How to Run Tests](#how-to-run-tests)
+
+---
+
 ## Features
 
 * **User Authentication:** Secure user registration and login functionality using JWT (JSON Web Tokens).
@@ -158,5 +171,3 @@ This project uses **JUnit 5** for unit testing. To run the tests, navigate to th
 > ```
 
 This command will compile the test source code, run all tests defined in the `src/test/java` directory, and report the results.
-
----
